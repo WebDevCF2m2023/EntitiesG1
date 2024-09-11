@@ -36,8 +36,9 @@ ou
 
 Le nom doit être en PascalCase terminé par Controller, mais Symfony se charge de le corriger en cas d'oubli.
 
-    php bin/console make:controller HomeController
-    created: src/Controller/HomeController.php
+    php bin/console make:controller MainController
+
+    created: src/Controller/MainController.php
     created: templates/home/index.html.twig
 
 On va vérifier la route par défaut
@@ -47,25 +48,41 @@ On va vérifier la route par défaut
 #### Modification de la route
 
 ```php
-// src/Controller/HomeController.php
+// src/Controller/MainController.php
 
 # ...
 
     #[Route('/', name: 'homepage')]
     public function index(): Response
     {
-        return $this->render('home/index.html.twig', [
+        return $this->render('main/index.html.twig', [
             'title' => 'Homepage',
+            'homepage_text'=> "Nous somme le ".date('d/m/Y \à H:i'),
+            
         ]);
     }
 # ...
+```
+
+Et de la vue (qui peut gérer la variable title contenant Homepage, et d'autres) :
+
+```twig
+{# templates/main/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+<h1>{{ title }}</h1>
+    <p>{{ homepage_text }}</p>
+{% endblock %}
 ```
 
 On peut accéder à l'accueil depuis la racine de notre
 
 https://127.0.0.1:8000
 
-#### Modifications de `HomeController`
+#### Modifications de `MainController`
 
 Pour obtenir 2 pages, homepage et about
 
@@ -83,15 +100,17 @@ class HomeController extends AbstractController
     #[Route('/', name: 'homepage')]
     public function index(): Response
     {
-        return $this->render('home/index.html.twig', [
+        return $this->render('main/index.html.twig', [
             'title' => 'Homepage',
+            'homepage_text'=> "Nous somme le ".date('d/m/Y \à H:i'),
         ]);
     }
     #[Route('/about', name: 'about_me')]
     public function aboutMe(): Response
     {
-        return $this->render('home/about.html.twig', [
+        return $this->render('main/about.html.twig', [
             'title' => 'About me',
+            'homepage_text'=> "Et je parle encore de moi !",
         ]);
     }
 }
