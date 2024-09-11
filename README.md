@@ -122,7 +122,7 @@ class HomeController extends AbstractController
 ```twig
 {# templates/base.html.twig #}
 {# ... #}
-<title>{% block title %}MySecondSymfonyC1{% endblock %}</title>
+<title>{% block title %}EntitiesG1{% endblock %}</title>
 {# ... #}
 ```
 
@@ -130,7 +130,7 @@ class HomeController extends AbstractController
 
 Nous utilisons path() pôur les liens vers les noms de routes pour pouvoir les changer à un seul endroit : `src/controller`
 
-templates/home/menu.html.twig
+templates/main/menu.html.twig
 
 ```twig
 <nav>
@@ -142,13 +142,15 @@ templates/home/menu.html.twig
 
 #### Modification de index.html.twig
 
+documentation de `parent` :
+
+https://twig.symfony.com/doc/3.x/functions/parent.html
+
 
 ```twig
 {% extends 'base.html.twig' %}
 
-{# on surcharge le block title avec {{ parent }}
-    et le titre passé par le contrôleur
-#}
+{# on surcharge le block parent #}
 {% block title %}{{ parent() }} | {{ title }}{% endblock %}
 
 
@@ -156,7 +158,7 @@ templates/home/menu.html.twig
     <div class="container">
         <h1>{{ title }}</h1>
 {# inclusion depuis la racine du projet ! (templates) #}
-{% include 'home/menu.html.twig' %}
+{% include 'main/menu.html.twig' %}
     </div>
 
 {% endblock %}
