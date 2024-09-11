@@ -206,7 +206,7 @@ Commentez la ligne postgresql et décommentez la ligne mysql
 
 Passez vos paramètres de connexion dans l'ordre
 
-utilisateur:mot_de_passe@ip_serveur:port/nomdelaDB?options
+driver://utilisateur:mot_de_passe@ip_serveur:port/nomdelaDB?options
 
 ```bash
 DATABASE_URL="mysql://root:@127.0.0.1:3306/mysecondesymfonyc1?serverVersion=8.0.31&charset=utf8mb4"
@@ -222,6 +222,8 @@ https://symfony.com/doc/current/doctrine.html
 
 
     php bin/console doctrine:database:create
+    # le mode raccourci
+    php bin/console d:d:c
 
 La base de donnée devrait être créée si mysql.exe est activé ou Wamp démarré 
 
@@ -232,33 +234,36 @@ Une entité est la représentation objet d'un élément de sauvegarde de donnée
     php bin/console make:entity
 
 ```bash
- php bin/console make:entity
+ php bin/console make:entity Post
+ # ....
+ created: src/Entity/Post.php
+ created: src/Repository/PostRepository.php
+```
 
- Class name of the entity to create or update (e.g. FierceGnome):
- > Article
-Article
+Avec seulement l'id de la classe Post
 
- Add the ability to broadcast entity updates using Symfony UX Turbo? (yes/no) [no]:
- > no
+## Première migration
 
- created: src/Entity/Article.php
- created: src/Repository/ArticleRepository.php
+    php bin/console make:migration
 
- New property name (press <return> to stop adding fields):
- >
-  Success!
-  
+    success :  created: migrations/Version20240911133839.php
 
- php bin/console make:entity
+puis
 
- Class name of the entity to create or update (e.g. GrumpyChef):
- > Article
-Article
+    php bin/console doctrine:migrations:migrate
 
+## Ajout de champs à l'entité `Post`
+
+On utilise maker pour ça
+
+    php bin/console make:entity Post
+
+```bash
+php bin/console make:entity Post
  Your entity already exists! So let's add some new fields!
 
  New property name (press <return> to stop adding fields):
- > title
+ > postTitle
 
  Field type (enter ? to see all types) [string]:
  >
@@ -270,36 +275,73 @@ Article
  Can this field be null in the database (nullable) (yes/no) [no]:
  >
 
- updated: src/Entity/Article.php
+ updated: src/Entity/Post.php
 
+ Add another property? Enter the property name (or press <return> to stop adding fields):
+ > postText
+
+ Field type (enter ? to see all types) [string]:
+ > text
 text
 
+ Can this field be null in the database (nullable) (yes/no) [no]:
+ >
+
+ updated: src/Entity/Post.php
+
+ Add another property? Enter the property name (or press <return> to stop adding fields):
+ > postDateCreated
+
+ Field type (enter ? to see all types) [string]:
+ > datetime
+datetime
+
+ Can this field be null in the database (nullable) (yes/no) [no]:
+ >
+
+ updated: src/Entity/Post.php
+
+ Add another property? Enter the property name (or press <return> to stop adding fields):
+ > postDatePublished
+
+ Field type (enter ? to see all types) [string]:
+ > datetime
+datetime
+
+ Can this field be null in the database (nullable) (yes/no) [no]:
+ > yes
+
+ updated: src/Entity/Post.php
+
+ Add another property? Enter the property name (or press <return> to stop adding fields):
+ > postIsPublished
+
+ Field type (enter ? to see all types) [string]:
+ > boolean
+boolean
+
+ Can this field be null in the database (nullable) (yes/no) [no]:
+ >
+
+ updated: src/Entity/Post.php
 ```
 
-## Première migration
-
-    php bin/console make:migration
-
-    success :  created: migrations/Version20240903142811.php
-
-puis
-
-    php bin/console doctrine:migrations:migrate
-
-## Ajout de champs à l'entité `Article`
-
-On utilise maker pour ça
-
-    php bin/console make:entity Article
+Ce qui nous crée le fichier suivant :
 
 ```php
-// src/Entity/Article.php
+// src/Entity/Post.php
 
 
-#...
+<?php
 
-#[ORM\Entity(repositoryClass: ArticleRepository::class)]
-class Article
+namespace App\Entity;
+
+use App\Repository\PostRepository;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity(repositoryClass: PostRepository::class)]
+class Post
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -307,38 +349,86 @@ class Article
     private ?int $id = null;
 
     #[ORM\Column(length: 160)]
-    private ?string $title = null;
+    private ?string $postTitle = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $text = null;
+    private ?string $postText = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $postDateCreated = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $date_created = null;
+    private ?\DateTimeInterface $postDatePublished = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $date_published = null;
+    #[ORM\Column]
+    private ?bool $postIsPublished = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?bool $published = null;
-
-    # ... getters and setters sauf pour les booleans
-
-    // ! pour boolean, is est rajouté pour le getter
-    // bug si on avait choisi isPublished -> isPublished
-    public function isPublished(): ?bool
+    public function getId(): ?int
     {
-        return $this->published;
+        return $this->id;
     }
-    
-    // Le setter peut boguer si on avait choisi comme nom
-    // isPublished -> setPublished
-    public function setPublished(?bool $published): static
+
+    public function getPostTitle(): ?string
     {
-        $this->published = $published;
+        return $this->postTitle;
+    }
+
+    public function setPostTitle(string $postTitle): static
+    {
+        $this->postTitle = $postTitle;
+
+        return $this;
+    }
+
+    public function getPostText(): ?string
+    {
+        return $this->postText;
+    }
+
+    public function setPostText(string $postText): static
+    {
+        $this->postText = $postText;
+
+        return $this;
+    }
+
+    public function getPostDateCreated(): ?\DateTimeInterface
+    {
+        return $this->postDateCreated;
+    }
+
+    public function setPostDateCreated(\DateTimeInterface $postDateCreated): static
+    {
+        $this->postDateCreated = $postDateCreated;
+
+        return $this;
+    }
+
+    public function getPostDatePublished(): ?\DateTimeInterface
+    {
+        return $this->postDatePublished;
+    }
+
+    public function setPostDatePublished(?\DateTimeInterface $postDatePublished): static
+    {
+        $this->postDatePublished = $postDatePublished;
+
+        return $this;
+    }
+
+    public function isPostIsPublished(): ?bool
+    {
+        return $this->postIsPublished;
+    }
+
+    public function setPostIsPublished(bool $postIsPublished): static
+    {
+        $this->postIsPublished = $postIsPublished;
 
         return $this;
     }
 }
+
 
 ```
 
