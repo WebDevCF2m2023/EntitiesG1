@@ -454,58 +454,16 @@ La documentation sur les colonnes (champs) dans `Doctrine` :
 
 https://www.doctrine-project.org/projects/doctrine-orm/en/3.2/reference/attributes-reference.html#attrref_column
 
+
+
 ```php
-// src/Entity/Article.php
+# ON EST ICI
 
-#...
-
-#[ORM\Entity(repositoryClass: ArticleRepository::class)]
-{
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(
-        options:[
-            "unsigned" => true,
-        ]
-    )]
-    private ?int $id = null;
-
-    #[ORM\Column(
-        length: 160
-    )]
-    private ?string $title = null;
-
-    #[ORM\Column(
-        type: Types::TEXT,
-    )]
-    private ?string $text = null;
-
-    #[ORM\Column(
-        type: Types::DATETIME_MUTABLE,
-        nullable: true,
-        options: [
-            'default' => 'CURRENT_TIMESTAMP',
-        ]
-    )]
-    private ?\DateTimeInterface $date_created = null;
-
-    #[ORM\Column(
-        type: Types::DATETIME_MUTABLE,
-        nullable: true
-    )]
-    private ?\DateTimeInterface $date_published = null;
-
-    #[ORM\Column(
-        nullable: true,
-        options: [
-            'default' => false,
-        ]
-    )]
-    private ?bool $published = null;
-    
-# Getters and setter
-
+php bin/console m:mi
+php bin/console d:m:m
 ```
+
+Faire la migration
 
 Vous pouvez migrer vers la DB, et voir le format colle à vos exigences MySQL en regardant la DB
 
