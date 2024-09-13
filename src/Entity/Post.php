@@ -41,7 +41,7 @@ class Post
     #[ORM\Column(
         type: Types::BOOLEAN,
         options : [
-            'default' => false,
+            'default' => false,                
         ]
     )]
     private ?bool $postIsPublished = null;

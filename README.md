@@ -467,45 +467,7 @@ Faire la migration
 
 Vous pouvez migrer vers la DB, et voir le format colle à vos exigences MySQL en regardant la DB
 
-## Création du `CRUD` de `Article`
 
-    php bin/console make:crud
-
-Génère les fichiers de CRUD, vues et tests (si choisis)
-
-    created: src/Controller/AdminArticleController.php
-    created: src/Form/ArticleType.php
-    created: templates/admin_article/_delete_form.html.twig
-    created: templates/admin_article/_form.html.twig
-    created: templates/admin_article/edit.html.twig
-    created: templates/admin_article/index.html.twig
-    created: templates/admin_article/new.html.twig
-    created: templates/admin_article/show.html.twig
-    created: tests/Controller/ArticleControllerTest.php
-
-On a rajouté le chemin dans le `menu.html.twig`
-
-On l'a trouvé avec `php bin/console debug:route`
-
-```twig
-<nav>
-    {# on utilise path('nom_du_chemin') lorsqu'on veut un lien vers une page #}
-    <a href="{{ path('homepage') }}">Homepage</a>
-    <a href="{{ path('about_me') }}">About me</a>
-    <a href="{{ path('app_admin_article_index') }}">CRUD Article</a>
-</nav>
-```
-
-On peut mettre l'include dans `templates/base.html.twig`, pour éviter de devoir le faire sur toutes les pages (on le retire de l'index et about)
-
-```twig
- <body>
-        {% block nav %}
-            {% include 'home/menu.html.twig' %}
-        {% endblock %}
-        {% block body %}{% endblock %}
-    </body>
-```
 
 ### Mise en forme des formulaires et des pages avec `bootstrap`
 
