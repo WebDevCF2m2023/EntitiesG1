@@ -682,9 +682,95 @@ Nous allons les faire dans une nouvelle branche, car nous n'en aurons pas besoin
 
 Nous allons créer le CRUD de `Post` : 
 
-    php bin/console make:crud
+    php bin/console make:crud Post
+    > AdminPostController
 
+    10 files changed, 388 insertions(+), 1 deletion(-)
+    create mode 100644 src/Controller/AdminPostController.php
+    create mode 100644 src/Form/PostType.php
+    create mode 100644 templates/admin_post/_delete_form.html.twig
+    create mode 100644 templates/admin_post/_form.html.twig
+    create mode 100644 templates/admin_post/edit.html.twig
+    create mode 100644 templates/admin_post/index.html.twig
+    create mode 100644 templates/admin_post/new.html.twig
+    create mode 100644 templates/admin_post/show.html.twig
+    create mode 100644 tests/Controller/PostControllerTest.php
 
+Pour voir les chemins :
+
+    php bin/console debug:route
+
+On va modifier notre menu pour créer un lien vers le CRUD de `Post` :
+
+```twig
+{# templates/main/menu.html.twig #}
+<nav>
+    {# on utilise path('nom_du_chemin') lorsqu'on veut un lien vers une page #}
+    <a href="{{ path('homepage') }}">Homepage</a>
+    <a href="{{ path('about_me') }}">About me</a>
+    <a href="{{ path('app_admin_post_index') }}">Post Crud</a>
+</nav>
+```
+
+Un fichier de type formulaire a été créé `src/Form/PostType.php`
+
+Par défault :
+
+```php
+<?php
+
+namespace App\Form;
+
+use App\Entity\Post;
+use App\Entity\Section;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class PostType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('postTitle')
+            ->add('postText')
+            ->add('postDateCreated', null, [
+                'widget' => 'single_text',
+                # si on ne le remplit pas, on envoie la date actuelle
+                'empty_data' => date('Y-m-d H:i:s'),
+                # non obligation de le remplir
+                'required' => false,
+            ])
+
+            ->add('postDatePublished', null, [
+                'widget' => 'single_text',
+            ])
+            // en supprimant ce add, on doit modifier AdminPostController pour
+            // donner une valeur par défaut à postIsPublished
+            // ->add('postIsPublished')
+
+            ->add('sections', EntityType::class, [
+                'class' => Section::class,
+                'choice_label' => 'id',
+                'multiple' => true,
+                # affichage en checkbox
+                'expanded' => true,
+                # non obligatoire
+                'required' => false,
+            ])
+        ;
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => Post::class,
+        ]);
+    }
+}
+
+```
 
 ### Mise en forme des formulaires et des pages avec `bootstrap`
 
