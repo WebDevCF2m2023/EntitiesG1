@@ -474,6 +474,20 @@ La table `Post` existe déjà, on va créer les tables suivantes, vides par déf
     php bin/console make:entity Comment
     php bin/console make:entity Tag
 
+Nous effectuons une nouvelle migration.
+
+On peut voir si on en a besoin avec
+
+    php bin/console doctrine:migrations:diff
+
+Si c'est le cas, il va créer un fichier de migration comme
+
+    php bin/console make:migration
+
+puis
+
+    php bin/console d:m:m
+
 
 ### Mise en forme des formulaires et des pages avec `bootstrap`
 
