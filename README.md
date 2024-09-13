@@ -457,7 +457,6 @@ https://www.doctrine-project.org/projects/doctrine-orm/en/3.2/reference/attribut
 
 
 ```php
-# ON EST ICI
 
 php bin/console m:mi
 php bin/console d:m:m
@@ -467,6 +466,13 @@ Faire la migration
 
 Vous pouvez migrer vers la DB, et voir le format colle à vos exigences MySQL en regardant la DB
 
+### Création de nos tables
+
+La table `Post` existe déjà, on va créer les tables suivantes, vides par défaut (mise à part l'id)
+
+    php bin/console make:entity Section
+    php bin/console make:entity Comment
+    php bin/console make:entity Tag
 
 
 ### Mise en forme des formulaires et des pages avec `bootstrap`

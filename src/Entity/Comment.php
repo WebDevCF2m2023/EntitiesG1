@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\SectionRepository;
+use App\Repository\CommentRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: SectionRepository::class)]
-class Section
+#[ORM\Entity(repositoryClass: CommentRepository::class)]
+class Comment
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

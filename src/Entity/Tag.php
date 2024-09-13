@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\SectionRepository;
+use App\Repository\TagRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: SectionRepository::class)]
-class Section
+#[ORM\Entity(repositoryClass: TagRepository::class)]
+class Tag
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

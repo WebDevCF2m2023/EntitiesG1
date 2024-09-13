@@ -17,7 +17,6 @@ class Post
         options: [
             'unsigned' => true,
         ]
-
     )]
     private ?int $id = null;
 
@@ -41,7 +40,7 @@ class Post
     #[ORM\Column(
         type: Types::BOOLEAN,
         options : [
-            'default' => false,                
+            'default' => false,
         ]
     )]
     private ?bool $postIsPublished = null;
