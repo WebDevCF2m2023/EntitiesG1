@@ -667,6 +667,19 @@ Et dans Dans `src/Entity/Section.php`
 
 ```
 
+### Création d'un tag en git
+
+    git tag -a v0.1 -m "Post M2M Section"
+    git push origin v0.1
+
+[tag v.0.1](https://github.com/WebDevCF2m2023/EntitiesG1/releases/tag/v0.1)
+
+### CRUD de Post et Section
+
+Nous allons les faire dans une nouvelle branche, car nous n'en aurons pas besoin immédiatement :
+
+    
+
 ### Mise en forme des formulaires et des pages avec `bootstrap`
 
 Nous allons utiliser les assets qui se trouvent dans le dossier `assets`
