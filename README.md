@@ -678,7 +678,13 @@ Et dans Dans `src/Entity/Section.php`
 
 Nous allons les faire dans une nouvelle branche, car nous n'en aurons pas besoin immédiatement :
 
-    
+    git checkout -b crudtemp
+
+Nous allons créer le CRUD de `Post` : 
+
+    php bin/console make:crud
+
+
 
 ### Mise en forme des formulaires et des pages avec `bootstrap`
 
