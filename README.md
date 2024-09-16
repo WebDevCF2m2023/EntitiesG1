@@ -743,9 +743,9 @@ class PostType extends AbstractType
                 'required' => false,
             ])
 
-            ->add('postDatePublished', null, [
-                'widget' => 'single_text',
-            ])
+            //->add('postDatePublished', null, [
+            //    'widget' => 'single_text',
+            // ])
             // en supprimant ce add, on doit modifier AdminPostController pour
             // donner une valeur par défaut à postIsPublished
             // ->add('postIsPublished')
@@ -770,6 +770,56 @@ class PostType extends AbstractType
     }
 }
 
+```
+
+Lors de la création, on ne souhaite pas valider `postDatePublished` et `postIsPublished`.
+
+Le problème est qu'on ne peut plus le modifier non plus avec l'update :
+
+On va donc créer un nouveau formulaire :
+
+    php bin/console make:form
+
+Création de `src/Form/UpdatePostType.php`
+
+On met juste la section comme non obligatoire
+
+```php
+->add('sections', EntityType::class, [
+                'class' => Section::class,
+                'choice_label' => 'id',
+                'multiple' => true,
+                # affichage en checkbox
+                'expanded' => true,
+                # non obligatoire
+                'required' => false,
+            ])
+```
+
+On va l'utiliser pour l'update en modifiant `src/Controller/AdminPostController.php`
+
+```php
+# ....
+# pour l'update, on utilise un autre formulaire
+use App\Form\UpdatePostType;
+# ....
+#[Route('/{id}/edit', name: 'app_admin_post_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Post $post, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(UpdatePostType::class, $post);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_admin_post_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('admin_post/edit.html.twig', [
+            'post' => $post,
+            'form' => $form,
+        ]);
+# ...
 ```
 
 ### Mise en forme des formulaires et des pages avec `bootstrap`

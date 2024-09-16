@@ -9,7 +9,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PostType extends AbstractType
+class UpdatePostType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -18,19 +18,11 @@ class PostType extends AbstractType
             ->add('postText')
             ->add('postDateCreated', null, [
                 'widget' => 'single_text',
-                # si on ne le remplit pas, on envoie la date actuelle
-                'empty_data' => date('Y-m-d H:i:s'),
-                # non obligation de le remplir
-                'required' => false,
             ])
-
-            //->add('postDatePublished', null, [
-            //    'widget' => 'single_text',
-            //])
-            // en supprimant ce add, on doit modifier AdminPostController pour
-            // donner une valeur par défaut à postIsPublished
-            //->add('postIsPublished')
-
+            ->add('postDatePublished', null, [
+                'widget' => 'single_text',
+            ])
+            ->add('postIsPublished')
             ->add('sections', EntityType::class, [
                 'class' => Section::class,
                 'choice_label' => 'id',
