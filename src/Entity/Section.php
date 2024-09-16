@@ -79,7 +79,7 @@ class Section
     {
         if (!$this->posts->contains($post)) {
             $this->posts->add($post);
-            $post->addSection($this);
+           // $post->addSection($this);
         }
 
         return $this;

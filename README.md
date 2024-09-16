@@ -865,4 +865,16 @@ Et nos formulaires sont jolis !
 
 On peut utiliser toutes les classes de `bootstrap`
 
-## Manipulation des formulaires
+Se mettre en mode 'prod' dans `.env.local`
+
+Lancer :
+
+    php bin/console asset-map:compile
+
+Puis vider le cache
+
+    php bin/console cache:clear
+
+Pour l'asynchrone dans PHP :
+
+    composer require amphp/http-client:^4.2.1
