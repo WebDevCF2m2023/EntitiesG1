@@ -878,3 +878,79 @@ Puis vider le cache
 Pour l'asynchrone dans PHP :
 
     composer require amphp/http-client:^4.2.1
+
+### Identification par http
+
+Dans `.env.local`, on peut mettre des variables dangereuses, elles ne seront pas envoyées sur github :
+
+**Gestion de l'http basic**
+
+```env
+# .env.local
+# variables inaccesibles
+# user
+HTTP_BASIC_USERNAME=lulu
+HTTP_BASIC_PASSWORD=lulut
+# admin
+HTTP_BASIC_ADMIN_USERNAME=papa
+HTTP_BASIC_ADMIN_PASSWORD=papat
+````
+
+Dans le fichier `config/packages/security.yaml`
+
+```yaml
+security:
+    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
+  # plaintext car en auto, le mot de passe serait crypté
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: plaintext
+    # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
+    providers:
+        # en mémoire, on met un utilisateur venant du .env.local
+        in_memory_users:
+            memory:
+                users:
+                    # simple utilisateur
+                    - identifier: '%env(HTTP_BASIC_USERNAME)%'
+                      password: '%env(HTTP_BASIC_PASSWORD)%'
+                      roles: [ ROLE_USER ]
+                    # admin  
+                    - identifier: '%env(HTTP_BASIC_ADMIN_USERNAME)%'
+                      password: '%env(HTTP_BASIC_ADMIN_PASSWORD)%'
+                      roles: [ ROLE_ADMIN ]
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            lazy: true
+            provider: in_memory_users
+            http_basic:
+
+
+            # activate different ways to authenticate
+            # https://symfony.com/doc/current/security.html#the-firewall
+
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        - { path: ^/admin/post, roles: ROLE_ADMIN }
+        - { path: ^/admin/section, roles: [ROLE_USER, ROLE_ADMIN] }
+
+when@test:
+    security:
+        password_hashers:
+            # By default, password hashers are resource intensive and take time. This is
+            # important to generate secure password hashes. In tests however, secure hashes
+            # are not important, waste resources and increase test times. The following
+            # reduces the work factor to the lowest possible values.
+            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+                algorithm: auto
+                cost: 4 # Lowest possible value for bcrypt
+                time_cost: 3 # Lowest possible value for argon
+                memory_cost: 10 # Lowest possible value for argon
+
+```
