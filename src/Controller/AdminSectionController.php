@@ -11,18 +11,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/adminsection')]
-final class AdminsectionController extends AbstractController
+#[Route('/admin/section')]
+final class AdminSectionController extends AbstractController
 {
-    #[Route(name: 'app_adminsection_index', methods: ['GET'])]
+    #[Route(name: 'app_admin_section_index', methods: ['GET'])]
     public function index(SectionRepository $sectionRepository): Response
     {
-        return $this->render('adminsection/index.html.twig', [
+        return $this->render('admin_section/index.html.twig', [
             'sections' => $sectionRepository->findAll(),
         ]);
     }
 
-    #[Route('/new', name: 'app_adminsection_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'app_admin_section_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $section = new Section();
@@ -33,24 +33,24 @@ final class AdminsectionController extends AbstractController
             $entityManager->persist($section);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_adminsection_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_admin_section_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('adminsection/new.html.twig', [
+        return $this->render('admin_section/new.html.twig', [
             'section' => $section,
             'form' => $form,
         ]);
     }
 
-    #[Route('/{id}', name: 'app_adminsection_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'app_admin_section_show', methods: ['GET'])]
     public function show(Section $section): Response
     {
-        return $this->render('adminsection/show.html.twig', [
+        return $this->render('admin_section/show.html.twig', [
             'section' => $section,
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_adminsection_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'app_admin_section_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Section $section, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(SectionType::class, $section);
@@ -59,16 +59,16 @@ final class AdminsectionController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_adminsection_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_admin_section_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('adminsection/edit.html.twig', [
+        return $this->render('admin_section/edit.html.twig', [
             'section' => $section,
             'form' => $form,
         ]);
     }
 
-    #[Route('/{id}', name: 'app_adminsection_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'app_admin_section_delete', methods: ['POST'])]
     public function delete(Request $request, Section $section, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$section->getId(), $request->getPayload()->getString('_token'))) {
@@ -76,6 +76,6 @@ final class AdminsectionController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_adminsection_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_admin_section_index', [], Response::HTTP_SEE_OTHER);
     }
 }

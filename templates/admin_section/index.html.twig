@@ -21,8 +21,8 @@
                 <td>{{ section.sectionTitle }}</td>
                 <td>{{ section.sectionDescription }}</td>
                 <td>
-                    <a href="{{ path('app_adminsection_show', {'id': section.id}) }}">show</a>
-                    <a href="{{ path('app_adminsection_edit', {'id': section.id}) }}">edit</a>
+                    <a href="{{ path('app_admin_section_show', {'id': section.id}) }}">show</a>
+                    <a href="{{ path('app_admin_section_edit', {'id': section.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -33,5 +33,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_adminsection_new') }}">Create new</a>
+    <a href="{{ path('app_admin_section_new') }}">Create new</a>
 {% endblock %}

@@ -13,7 +13,7 @@ final class SectionControllerTest extends WebTestCase
     private KernelBrowser $client;
     private EntityManagerInterface $manager;
     private EntityRepository $repository;
-    private string $path = '/adminsection/';
+    private string $path = '/admin/section/';
 
     protected function setUp(): void
     {
@@ -96,7 +96,7 @@ final class SectionControllerTest extends WebTestCase
             'section[posts]' => 'Something New',
         ]);
 
-        self::assertResponseRedirects('/adminsection/');
+        self::assertResponseRedirects('/admin/section/');
 
         $fixture = $this->repository->findAll();
 
@@ -119,7 +119,7 @@ final class SectionControllerTest extends WebTestCase
         $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
         $this->client->submitForm('Delete');
 
-        self::assertResponseRedirects('/adminsection/');
+        self::assertResponseRedirects('/admin/section/');
         self::assertSame(0, $this->repository->count([]));
     }
 }
