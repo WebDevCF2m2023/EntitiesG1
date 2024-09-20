@@ -209,7 +209,7 @@ Passez vos paramètres de connexion dans l'ordre
 driver://utilisateur:mot_de_passe@ip_serveur:port/nomdelaDB?options
 
 ```bash
-DATABASE_URL="mysql://root:@127.0.0.1:3306/mysecondesymfonyc1?serverVersion=8.0.31&charset=utf8mb4"
+DATABASE_URL="mysql://root:@127.0.0.1:3306/entitiesg1?serverVersion=8.0.31&charset=utf8mb4"
 # DATABASE_URL="mysql://app:!ChangeMe!@127.0.0.1:3306/app?serverVersion=10.11.2-MariaDB&charset=utf8mb4"
 # DATABASE_URL="postgresql://app:!ChangeMe!@127.0.0.1:5432/app?serverVersion=16&charset=utf8"
 ```
@@ -723,4 +723,3 @@ Et nos formulaires sont jolis !
 
 On peut utiliser toutes les classes de `bootstrap`
 
-## Manipulation des formulaires
