@@ -782,3 +782,8 @@ On peut aussi voir la gestion de la sécurité dans `config/packages/security.ya
                 property: username
 # ...
 ```
+
+On modifie nos tables pour pouvoir vérifier la cohérence en MySQL
+
+    php bin/console ma:mi
+    php bin/console d:m:m
