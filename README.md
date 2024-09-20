@@ -725,4 +725,60 @@ On peut utiliser toutes les classes de `bootstrap`
 
 ### On va compléter les tables présentes
 
+Création des relations et des champs de table :
 
+    php bin/console make:migration
+
+    php bin/console doctrine:migrations:migrate
+
+## Création des 'utilisateurs'
+
+    php bin/console make:user
+
+```bash
+$ php bin/console make:user
+
+ The name of the security user class (e.g. User) [User]: >
+
+ Do you want to store user data in the database (via Doctrine)? (yes/no) [yes]:
+ >
+
+ Enter a property name that will be the unique "display" name for the user (e.g. email, usernam
+e, uuid) [email]:
+ > username
+
+ Will this app need to hash/check user passwords? Choose No if passwords are not needed or will
+ be checked/hashed by some other system (e.g. a single sign-on server).
+
+ Does this app need to hash/check user passwords? (yes/no) [yes]:
+ >
+
+ created: src/Entity/User.php
+ created: src/Repository/UserRepository.php
+ updated: src/Entity/User.php
+ updated: config/packages/security.yaml
+
+
+  Success!
+
+
+ Next Steps:
+   - Review your new App\Entity\User class.
+   - Use make:entity to add more fields to your User entity and then run make:migration.
+   - Create a way to authenticate! See https://symfony.com/doc/current/security.html
+```
+
+Création d'une entité avec la particularité de permettre les connexions `src/Entity/User.php`. On va la modifier
+
+On peut aussi voir la gestion de la sécurité dans `config/packages/security.yaml`:
+
+```twig
+#...
+    providers:
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: username
+# ...
+```
