@@ -723,3 +723,6 @@ Et nos formulaires sont jolis !
 
 On peut utiliser toutes les classes de `bootstrap`
 
+### On va compléter les tables présentes
+
+
