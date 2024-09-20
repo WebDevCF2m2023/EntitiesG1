@@ -1,10 +1,10 @@
 {# templates/main/index.html.twig #}
-{% extends 'base.html.twig' %}
+{% extends 'template.front.html.twig' %}
 
 {# on surcharge le block parent #}
 {% block title %}{{ parent() }} | {{ title }}{% endblock %}
 
-{% block body %}
+{% block header %}
 <h1>{{ title }}</h1>
     <p>{{ homepage_text }}</p>
 {% endblock %}

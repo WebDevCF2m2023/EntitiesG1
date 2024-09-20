@@ -866,3 +866,38 @@ ici, vous choisissez
   ici vous choisissez
 - user_active
  true
+
+### Ajoutez login/logout au menu
+
+```twig
+{# templates/main/menu.html.twig #}
+<nav>
+    {# on utilise path('nom_du_chemin') lorsqu'on veut un lien vers une page #}
+    <a href="{{ path('homepage') }}">Homepage</a>
+    <a href="{{ path('about_me') }}">About me</a>
+    {# si on est connecté, on affiche la déconnexion (pas de sécurité réelle) #}
+    {% if is_granted('IS_AUTHENTICATED') %}
+    <a href="{{ path('app_logout') }}">Logout</a>
+    {# si pas connecté, lien vers login #}
+    {% else %}
+    <a href="{{ path('app_login') }}">Login</a>
+    {% endif %}
+</nav>
+```
+
+Ceci n'est que la partie front-end, si on souhaite inactiver la possibilité d'aller sur `/login` si on est connecté, on peut le faire au niveau du contrôleur :
+
+`src/Controller/SecurityController.php`
+```php
+# ...
+#[Route(path: '/login', name: 'app_login')]
+    public function login(AuthenticationUtils $authenticationUtils): Response
+    {
+
+        // si on est déjà connecté
+        if ($this->getUser()) {
+            // on retourne sur l'accueil
+            return $this->redirectToRoute('homepage');
+        }
+# ...
+```
