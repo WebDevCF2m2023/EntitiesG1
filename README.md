@@ -787,3 +787,82 @@ On modifie nos tables pour pouvoir vérifier la cohérence en MySQL
 
     php bin/console ma:mi
     php bin/console d:m:m
+
+## Création d'une page de connexion
+
+    php bin/console make:security:form-login
+
+```bash
+php bin/console make:security:form-login
+
+ Choose a name for the controller class (e.g. SecurityController) [SecurityController]:
+ >
+
+ Do you want to generate a '/logout' URL? (yes/no) [yes]:
+ >
+
+ Do you want to generate PHPUnit tests? [Experimental] (yes/no) [no]:
+ >
+
+ created: src/Controller/SecurityController.php
+ created: templates/security/login.html.twig
+ updated: config/packages/security.yaml
+
+
+  Success!
+
+
+ Next: Review and adapt the login template: security/login.html.twig to suit your needs.
+```
+
+```yaml
+# config/packages/security.yaml
+
+# ...
+firewalls:
+  dev:
+    pattern: ^/(_(profiler|wdt)|css|images|js)/
+    security: false
+  main:
+    lazy: true
+    provider: app_user_provider
+    # notre firewall ouvre une porte pour User
+    form_login:
+      login_path: app_login
+      check_path: app_login
+      enable_csrf: true
+    logout:
+      path: app_logout
+# ...
+```
+
+Débogage des routes :
+
+    php bin/console de:r
+
+On va remplir la table `user`
+
+Avec le contenu suivant :
+
+- username
+  1) adminLee
+  2) redacGuy
+  3) userEr
+- roles ! json
+  1) ["ROLE_ADMIN","ROLE_REDAC","ROLE_USER"]
+  2) ["ROLE_REDAC","ROLE_USER"]
+  3) []
+- password : Il va falloir crypter les mots de passes avec
+  
+  php bin/console security:hash-password
+
+1) 123admin123
+2) ad123min
+3) adddmin
+
+- user_mail
+ici, vous choisissez
+- user_real_name
+  ici vous choisissez
+- user_active
+ true
