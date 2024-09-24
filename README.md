@@ -910,3 +910,54 @@ https://startbootstrap.com/template/blog-post#google_vignette
 
 Le dossier se trouve dans `datas`
 
+On va partir de `templates/base.html.twig` pour modifier les entêtes, on utilise la balise `{{ asset('assets/mon/chemin/fichier.jpg') }}`
+
+En effet `AssetMapper` va chercher les fichiers publics dans le dossier `assets`, et le compiler à chaque fois (tant qu'on est en développement)
+
+Exemple pour le fichier `template/base.html.twig`
+
+```twig
+{# template/base.html.twig #}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    {# pour un bootstrap responsive #}
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <title>{% block title %}EntitiesG1{% endblock %}</title>
+        <!-- Favicon-->
+        {# icone se trouvant dans le dossier `assets` #}
+        <link rel="icon" type="image/x-icon" href="{{ asset('img/favicon.ico') }}" />
+        {% block stylesheets %}
+        {% endblock %}
+
+        {% block javascripts %}
+            {# utilisation de ASSETMAPPER #}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+        {% endblock %}
+    </head>
+    <body>
+    {#  notre contenu (nos templates #}
+    {% block content %}
+    {% endblock %}
+    {# contenu automatique des cruds, form etc... #}
+    {% block body %}
+    {% endblock %}
+    </body>
+</html>
+
+```
+
+Dans `templates/main/menu.html.twig`
+
+```twig
+        {# si nous sommes connectés #}
+                {% if is_granted('IS_AUTHENTICATED') %}
+                <li class="nav-item"><a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a></li>
+                    {% if is_granted('ROLE_ADMIN') %}
+                <li class="nav-item"><a class="nav-link" href="#">Administration</a></li>
+                    {% endif %}
+                {% else %}
+                <li class="nav-item"><a class="nav-link" href="{{ path('app_login') }}">Connexion</a></li>
+                {% endif %}
+```
