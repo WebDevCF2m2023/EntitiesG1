@@ -968,4 +968,19 @@ Il faut utiliser un nombre de block adéquat pour nos pages de front
 
 ### Créer un contrôleur d'administration
 
-  php bin/console make:controller
+  php bin/console make:controller AdminController
+  
+Une route vers un dossier `admin` a été créée, on va vérifier si un rôle lui est attribué dans le fichier `config/packages/security.yaml`
+
+```yaml
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        # - { path: ^/profile, roles: ROLE_USER }
+```
+
+Dorénavant, ce dossier (et sous-dossiers sont accessibles que par les `ROLE_ADMIN`)
+
+https://symfony.com/doc/current/security.html#roles
+
