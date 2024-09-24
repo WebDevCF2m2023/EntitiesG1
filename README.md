@@ -961,3 +961,11 @@ Dans `templates/main/menu.html.twig`
                 <li class="nav-item"><a class="nav-link" href="{{ path('app_login') }}">Connexion</a></li>
                 {% endif %}
 ```
+
+## Mise en place ardue du template
+
+Il faut utiliser un nombre de block adéquat pour nos pages de front
+
+### Créer un contrôleur d'administration
+
+  php bin/console make:controller
