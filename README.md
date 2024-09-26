@@ -1018,3 +1018,43 @@ On modifie `templates/admin/index.html.twig` pour le faire correspondre aux vari
     <p>{{ homepage_text }}</p>
 {% endblock %}
 ```
+
+## Modification des menus
+
+Suivant que l'on soit en front `templates/main/_menu.html.twig` ou en back `templates/admin/_menu.admin.html.twig`
+
+## Création du CRUD pour `Section`
+
+```bash
+php bin/console make:crud
+
+ The class name of the entity to create CRUD (e.g. AgreeableChef):
+ > Section
+Section
+
+ Choose a name for your controller class (e.g. SectionController) [SectionController]:
+ > AdminSectionController
+
+ Do you want to generate PHPUnit tests? [Experimental] (yes/no) [no]:
+ >
+
+ created: src/Controller/AdminSectionController.php
+ created: src/Form/SectionType.php
+ created: templates/admin_section/_delete_form.html.twig
+ created: templates/admin_section/_form.html.twig
+ created: templates/admin_section/edit.html.twig
+ created: templates/admin_section/index.html.twig
+ created: templates/admin_section/new.html.twig
+ created: templates/admin_section/show.html.twig
+
+
+  Success!
+
+
+ Next: Check your new CRUD by going to /admin/section/
+```
+
+On crée les liens dans la page d'accueil et le menu de l'admin vers 
+
+    <a href="{{ path('app_admin_section_index') }}">Crud Section</a>
+
