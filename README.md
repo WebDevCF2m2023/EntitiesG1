@@ -1175,4 +1175,138 @@ Et dans le menu `templates/main/_menu.html.twig`
 
 ```
 
-## 
+## Création du CRUD de Post
+
+```bash
+php bin/console make:crud
+
+ The class name of the entity to create CRUD (e.g. FierceChef):
+ > Post
+Post
+
+ Choose a name for your controller class (e.g. PostController) [PostController]:
+ > AdminPostController
+
+ Do you want to generate PHPUnit tests? [Experimental] (yes/no) [no]:
+ >
+
+ created: src/Controller/AdminPostController.php
+ created: src/Form/PostType.php
+ created: templates/admin_post/_delete_form.html.twig
+ created: templates/admin_post/_form.html.twig
+ created: templates/admin_post/edit.html.twig
+ created: templates/admin_post/index.html.twig
+ created: templates/admin_post/new.html.twig
+ created: templates/admin_post/show.html.twig
+
+
+  Success!
+
+
+ Next: Check your new CRUD by going to /admin/post/
+
+```
+
+On a un problème avec les tags :
+
+`src/Form/PostType.php`
+
+```php
+<?php
+
+namespace App\Form;
+
+use App\Entity\Post;
+use App\Entity\Section;
+use App\Entity\Tag;
+use App\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class PostType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('postTitle')
+            ->add('postText')
+            ->add('postDateCreated', null, [
+                'widget' => 'single_text',
+                # non obligatoire
+                'required' => false,
+                # si vide on envoie la date du jour
+                'empty_data' => date('Y-m-d H:i:s'),
+            ])
+            ->add('postDatePublished', null, [
+                'widget' => 'single_text',
+            ])
+            ->add('postIsPublished')
+            ->add('sections', EntityType::class, [
+                'class' => Section::class,
+                # choix du titre dans les checkboxes
+                'choice_label' => 'sectionTitle',
+                'multiple' => true,
+                'expanded' => true,
+            ])
+            # on peut se passer des tags pour le moment
+            /*->add('tags', EntityType::class, [
+                'class' => Tag::class,
+                'choice_label' => 'id',
+                'multiple' => true,
+                'required' => false,
+            ])*/
+            ->add('user', EntityType::class, [
+                'class' => User::class,
+                'choice_label' => 'username',
+            ])
+        ;
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => Post::class,
+        ]);
+    }
+}
+
+```
+
+et on va modifier l'insertion de `src/Controller/AdminPostController.php` pour avoir une date par défaut et éviter une erreur lors de l'insertion d'un nouveau Post
+
+```php
+#[Route('/new', name: 'app_admin_post_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $post = new Post();
+        // on veut une date de création sans formulaire
+        $post->setPostDateCreated(new \DateTime());
+        $form = $this->createForm(PostType::class, $post);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($post);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_admin_post_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('admin_post/new.html.twig', [
+            'post' => $post,
+            'form' => $form,
+            'title' => 'New Post',
+            'homepage_text' => "Administration des Posts par {$this->getUser()->getUsername()}",
+        ]);
+
+```
+
+## On doit modifier nos Crud de Post
+
+Pour avoir notre template, on peut commencer à faire les entêtes :
+
+`templates/admin_post/index.html.twig` pour les 4 éléments du CRUD
+
+Puis les liens depuis l'admin
+
