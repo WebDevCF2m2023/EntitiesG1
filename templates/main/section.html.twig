@@ -8,3 +8,12 @@
 <h1>{{ title }}</h1>
     <p>{{ homepage_text }}</p>
 {% endblock %}
+{% block main %}
+     {% for post in section.posts %}
+        <h3>{{ post.postTitle }}</h3>
+         <p>Ecrit par {{ post.user.username }}</p>
+    {% else %}
+    <h3>Pas encore d'articles</h3>
+    {% endfor %}
+
+{% endblock %}
