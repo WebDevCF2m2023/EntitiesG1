@@ -8,7 +8,10 @@
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item"><a class="nav-link" href="{{ path('homepage') }}">Accueil</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ path('about_me') }}">About</a></li>
-                <li class="nav-item"><a class="nav-link" href="#!">nos sections</a></li>
+                {# on va afficher les liens vers nos section #}
+                {% for section in sections %}
+                <li class="nav-item"><a class="nav-link" href="{{ path('section',{id:section.id}) }}">{{ section.sectionTitle }}</a></li>
+                {% endfor %}
                 {# si nous sommes connectés #}
                 {% if is_granted('IS_AUTHENTICATED') %}
                 <li class="nav-item"><a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a></li>
