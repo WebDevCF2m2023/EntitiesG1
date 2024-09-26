@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : mar. 24 sep. 2024 à 13:28
+-- Généré le : jeu. 26 sep. 2024 à 13:30
 -- Version du serveur : 8.0.31
 -- Version de PHP : 8.2.0
 
@@ -15,6 +15,7 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `entitiesg1`
 --
+DROP DATABASE IF EXISTS `entitiesg1`;
 CREATE DATABASE IF NOT EXISTS `entitiesg1` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 USE `entitiesg1`;
 
@@ -97,7 +98,15 @@ CREATE TABLE IF NOT EXISTS `post` (
     `user_id` int UNSIGNED NOT NULL,
     PRIMARY KEY (`id`),
     KEY `IDX_5A8A6C8DA76ED395` (`user_id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `post`
+--
+
+INSERT INTO `post` (`id`, `post_title`, `post_text`, `post_date_created`, `post_date_published`, `post_is_published`, `user_id`) VALUES
+                                                                                                                                     (1, 'First article', 'First article First article First article First article First article', '2024-09-26 12:01:17', '2024-09-26 12:00:21', 1, 2),
+                                                                                                                                     (2, 'Second article ', 'Second article Second article Second article Second article Second article Second article Second article Second article ', '2024-09-26 13:18:28', NULL, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -113,6 +122,15 @@ CREATE TABLE IF NOT EXISTS `post_section` (
     KEY `IDX_109BCDDC4B89032C` (`post_id`),
     KEY `IDX_109BCDDCD823E37A` (`section_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `post_section`
+--
+
+INSERT INTO `post_section` (`post_id`, `section_id`) VALUES
+                                                         (1, 1),
+                                                         (1, 2),
+                                                         (2, 1);
 
 -- --------------------------------------------------------
 
@@ -141,7 +159,15 @@ CREATE TABLE IF NOT EXISTS `section` (
                                          `section_title` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL,
     `section_description` varchar(600) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
     PRIMARY KEY (`id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `section`
+--
+
+INSERT INTO `section` (`id`, `section_title`, `section_description`) VALUES
+                                                                         (1, 'Section1', 'descritpion de la section 1'),
+                                                                         (2, 'Section2', NULL);
 
 -- --------------------------------------------------------
 

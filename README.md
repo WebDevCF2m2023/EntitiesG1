@@ -1154,4 +1154,25 @@ Et dans le menu `templates/main/_menu.html.twig`
 <h1>{{ title }}</h1>
     <p>{{ homepage_text }}</p>
 {% endblock %}
+% block main %}
+     {% for post in section.posts %}
+        <h3>{{ post.postTitle }}</h3>
+         <p>Ecrit par {{ post.user.username }} le
+             {{ post.postDateCreated|date("d/m/Y \à H:i") }}</p>
+         <p>{{ post.postText }}</p>
+    <p>
+         {% for section in post.sections %}
+             <a href="{{ path('section',{id:section.id}) }}">{{ section.SectionTitle }}</a>
+         {% else %}
+             <h3>Pas encore de section</h3>
+         {%  endfor %}
+             </p>
+    {% else %}
+    <h3>Pas encore d'articles</h3>
+    {% endfor %}
+
+{% endblock %}
+
 ```
+
+## 
