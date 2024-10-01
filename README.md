@@ -1310,3 +1310,41 @@ Pour avoir notre template, on peut commencer à faire les entêtes :
 
 Puis les liens depuis l'admin
 
+
+## Chargement des `Post` sur la page d'accueil
+
+Plusieurs possibilités :
+
+- Appel de du repository spécifique
+- Appel de l'EntityManagerInterface, qui peut gérer toutes les Entités
+
+use Doctrine\ORM\EntityManagerInterface;
+
+Puis passage à la méthode.
+
+#### Utilisation du findBy uniquement pour l'ordre :
+
+```php
+$posts = $em->getRepository(Post::class)->findBy([], 
+                    ['postDateCreated'=>'DESC']);
+// dump and die, débug mais arrête le script
+        // dd($posts);
+```
+
+On peut déboguer dans la vue : 
+
+```twig
+{{ dump(variable) }}
+```
+
+#### Utilisation du findBy pour les critères
+
+```php
+$posts = $em->getRepository(Post::class)->findBy(['postIsPublished'=>true], ['postDatePublished'=>'DESC']);
+        // dump and die, débug mais arrête le script
+        // dd($posts);
+```
+
+Pour l'affichage dans `templates/main/index.html.twig`
+
+

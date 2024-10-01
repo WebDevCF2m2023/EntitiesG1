@@ -4,6 +4,10 @@ namespace App\Controller;
 
 # appel du gestionnaire de section
 use App\Repository\SectionRepository;
+# Appel de l'EntityManagerInterface
+use Doctrine\ORM\EntityManagerInterface;
+# Appel de l'Entity Post
+use App\Entity\Post;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -13,15 +17,21 @@ class MainController extends AbstractController
 {
     #[Route('/', name: 'homepage')]
     # appel du gestionnaire de Section
-    public function index(SectionRepository $sections): Response
+    public function index(SectionRepository $sections, EntityManagerInterface $em): Response
     {
+        $posts = $em->getRepository(Post::class)->findBy(['postIsPublished'=>true], ['postDatePublished'=>'DESC']);
+        // dump and die, débug mais arrête le script
+        // dd($posts);
         return $this->render(
             'main/index.html.twig', [
                 'title' => 'Homepage',
                 'homepage_text'=> "Nous somme le ".date('d/m/Y \à H:i'
                 ),
                 # on met dans une variable pour twig toutes les sections récupérées
-                'sections' => $sections->findAll()
+                'sections' => $sections->findAll(),
+                # Liste des postes
+                'posts' => $posts,
+
             ]
         );
     }
